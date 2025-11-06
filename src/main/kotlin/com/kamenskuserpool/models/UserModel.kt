@@ -18,7 +18,7 @@ data class UserModel(
     @Column(name = "ID_CUSTOMER")
     val id: UUID = UUID.randomUUID(),
 
-    @Column(name = "COD_COSTUMER", nullable = false, unique = true)
+    @Column(name = "COD_CUSTOMER", nullable = false, unique = true)
     val customerId: String = "",
 
     @Column(name = "FULL_NAME")
@@ -28,13 +28,13 @@ data class UserModel(
     val safepayUserId: Long = 0,
 
     @Column(name = "CREDIT_FLAG", nullable = false)
-    val creditFlg: Boolean = false,
+    var creditFlg: Boolean = false,
 
     @Column(name = "ACCOUNT_FLAG")
-    val accountFlg: Boolean = false,
+    var accountFlg: Boolean = false,
 
     @Column(name = "PREPAID_FLAG")
-    val prepaidFlg: Boolean = false,
+    var prepaidFlg: Boolean = false,
 
     @Column(name = "CREATION_TIMESTAMP")
     @CreationTimestamp
@@ -45,5 +45,5 @@ data class UserModel(
     val dateUpdate: LocalDateTime = LocalDateTime.now(),
 
     @Column(name = "CPF")
-    val cpf: String = "",
+    val cpf: String = ""
 )

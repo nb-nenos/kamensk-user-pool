@@ -12,19 +12,19 @@ import org.springframework.web.bind.annotation.RestController
 @RequestMapping("/user")
 class UserController(private val userService: UserService) {
 
-    @GetMapping("/users/random")
+    @GetMapping("/random")
     fun getRandomUsers(): ResponseEntity<UserModel> {
         val randomUser = userService.getRandomUsers()
         return ResponseEntity.status(HttpStatus.OK).body(randomUser)
     }
 
-    @GetMapping("/users/with-credit")
-    fun getUserWithCredit(): ResponseEntity<UserModel>{
+    @GetMapping("/with-credit")
+    fun getUserWithCredit(): ResponseEntity<UserModel> {
         val creditUser = userService.getUserWithCredit()
         return ResponseEntity.status(HttpStatus.OK).body(creditUser)
     }
 
-    @GetMapping("/users/with-prepaid")
+    @GetMapping("/with-prepaid")
     fun getPrepaidUser(): ResponseEntity<UserModel> {
         val prepaidUser = userService.getPrepaidUser()
         return ResponseEntity.status(HttpStatus.OK).body(prepaidUser)
