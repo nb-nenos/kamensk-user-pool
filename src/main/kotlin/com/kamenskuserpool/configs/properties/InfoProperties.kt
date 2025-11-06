@@ -1,6 +1,5 @@
 package com.kamenskuserpool.configs.properties
 
-import com.kamenskuserpool.enums.UserTypeEnum
 import org.springframework.boot.context.properties.ConfigurationProperties
 
 @ConfigurationProperties("kamensk-user-pool.info")
