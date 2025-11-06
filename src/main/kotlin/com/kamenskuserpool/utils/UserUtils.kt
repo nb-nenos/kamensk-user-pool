@@ -16,7 +16,7 @@ class UserUtils(
 ) {
 
     fun userDtoFactory(): UserDto =
-         UserDto(
+        UserDto(
             fullName = infoProperties.fullName,
             dateOfBirth = infoProperties.dateOfBirth,
             cpf = generateCpf(),
@@ -28,7 +28,6 @@ class UserUtils(
             address = listOf(addressProperties),
             phoneNumber = listOf(phoneNumberProperties)
         )
-
 
     fun generateCpf(): String {
         val result = mutableListOf<Int>()
