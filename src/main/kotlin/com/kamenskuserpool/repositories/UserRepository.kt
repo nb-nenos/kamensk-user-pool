@@ -3,6 +3,7 @@ package com.kamenskuserpool.repositories
 import com.kamenskuserpool.models.UserModel
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.data.jpa.repository.Query
+import org.springframework.data.repository.query.Param
 import java.util.UUID
 
 interface UserRepository : JpaRepository<UserModel, UUID> {
@@ -22,7 +23,9 @@ interface UserRepository : JpaRepository<UserModel, UUID> {
         """
             SELECT * 
             FROM tb_user
-            WHERE creditFlg=true
+            WHERE credit_flag = true
+            ORDER BY RANDOM()
+            LIMIT 1
             """,
         nativeQuery = true
     )
@@ -32,9 +35,13 @@ interface UserRepository : JpaRepository<UserModel, UUID> {
         """
             SELECT *
             FROM tb_user
-            WHERE prepaidFlg=true
+            WHERE prepaid_flag = true
+            ORDER BY RANDOM()
+            LIMIT 1
             """,
         nativeQuery = true
     )
     fun findByIsPrepaidTrue(): UserModel?
+
+    fun findByCustomerId(@Param("customerId")customerId: String): UserModel?
 }
