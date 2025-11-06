@@ -1,4 +1,3 @@
 package com.kamenskuserpool.exceptions
 
-class UserNotFoundException(message: String): RuntimeException(message) {
-}
+class UserNotFoundException(message: String = "User not found!!!!!!!") : RuntimeException(message)
