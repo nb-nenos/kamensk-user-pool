@@ -1,7 +1,7 @@
 package com.kamenskuserpool.services
 
-import com.kamenskuserpool.exceptions.CreditNotFound
-import com.kamenskuserpool.exceptions.PrepaidNotFound
+import com.kamenskuserpool.exceptions.CreditNotFoundException
+import com.kamenskuserpool.exceptions.PrepaidNotFoundException
 import com.kamenskuserpool.exceptions.UserNotFoundException
 import com.kamenskuserpool.mappers.toUserModel
 import com.kamenskuserpool.models.UserModel
@@ -16,12 +16,11 @@ class UserService(
     private val userRepository: UserRepository,
     private val userUtils: UserUtils,
     private val safepayUserIdService: SafepayUserIdService
-    ) {
+) {
 
     private val logger = LoggerFactory.getLogger(UserService::class.java)
 
     fun createUser() {
-
         logger.info("Starting user creation")
 
         val userDto = userUtils.userDtoFactory()
@@ -41,20 +40,20 @@ class UserService(
 
     fun getRandomUsers(): UserModel {
         logger.info("Searching for random user...")
-         return userRepository.findRandomUser()
+        return userRepository.findRandomUser()
             ?: run {
                 logger.error("User not found.")
-                throw UserNotFoundException("User not found.")
+                throw UserNotFoundException()
             }
     }
 
     fun getUserWithCredit(): UserModel {
         logger.info("Searching for user with Credit Flag...")
         return userRepository.findByCreditTrue()
-           ?: run {
-               logger.error("User with no Credit Flag.")
-               throw CreditNotFound("User with no Credit Flag.")
-           }
+            ?: run {
+                logger.error("User with no Credit Flag.")
+                throw CreditNotFoundException()
+            }
     }
 
     fun getPrepaidUser(): UserModel {
@@ -62,7 +61,7 @@ class UserService(
         return userRepository.findByIsPrepaidTrue()
             ?: run {
                 logger.error("User with no Prepaid Flag.")
-                throw PrepaidNotFound ("User with no Prepaid Flag.")
+                throw PrepaidNotFoundException()
             }
     }
 }
