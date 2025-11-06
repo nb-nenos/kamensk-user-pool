@@ -8,7 +8,6 @@ import feign.FeignException
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
 
-
 @Service
 class SafepayUserIdService(
     private val safepayUserIdClient: SafepayUserIdClient
@@ -18,11 +17,9 @@ class SafepayUserIdService(
     fun createSafepayUserId(userDto: UserDto): ResponseSafepayUserIdDto {
         try {
             return safepayUserIdClient.getSafepayUserId(userDto.email)
-
         } catch (ex: FeignException) {
             logger.error("Error: falha ao comunicar com a API externa.")
-            throw SafepayUserIdException("Erro ao comunicar com a API.")
-
+            throw SafepayUserIdException()
         }
     }
 }

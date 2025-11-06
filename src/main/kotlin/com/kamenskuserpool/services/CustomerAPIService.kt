@@ -8,7 +8,6 @@ import feign.FeignException
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
 
-
 @Service
 class CustomerAPIService(
     private val customerAPIClient: CustomerAPIClient
@@ -18,10 +17,9 @@ class CustomerAPIService(
     fun createUser(userDto: UserDto): ResponseUserDto {
         try {
             return customerAPIClient.createUser(userDto)
-
         } catch (ex: FeignException) {
             logger.error("Error: falha ao comunicar com a API externa.")
-            throw ClientException("Erro ao comunicar com a API externa.")
+            throw ClientException()
         }
     }
 }
