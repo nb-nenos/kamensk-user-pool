@@ -1,14 +1,14 @@
 package com.kamenskuserpool.services
 
 import com.kamenskuserpool.dtos.RequestSwitchAccountDto
-import com.kamenskuserpool.exceptions.AccountNotFoundException
+import com.kamenskuserpool.exceptions.InvalidRequestException
 import com.kamenskuserpool.exceptions.UserNotFoundException
 import com.kamenskuserpool.repositories.UserRepository
 import org.springframework.stereotype.Service
 
 @Service
 class SwitchAccountService(
-    private val userRepository: UserRepository
+    private val userRepository: UserRepository,
 ) {
 
     fun switchAccount(switchAccountPayload: RequestSwitchAccountDto): String {
@@ -24,7 +24,7 @@ class SwitchAccountService(
             userRepository.save(customerAccount)
             return "Account off"
         } else {
-            throw AccountNotFoundException()
+            throw InvalidRequestException("Insert a valid value (on, off)")
         }
     }
 }
