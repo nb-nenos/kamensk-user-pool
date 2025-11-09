@@ -1,9 +1,8 @@
 package com.kamenskuserpool.services
 
-import com.kamenskuserpool.dtos.RequestSwitchAccountDto
 import com.kamenskuserpool.exceptions.InvalidRequestException
-import com.kamenskuserpool.models.UserModel
 import com.kamenskuserpool.repositories.UserRepository
+import com.kamenskuserpool.utils.DtoFactory
 import com.kamenskuserpool.utils.UserFactory
 import io.mockk.every
 import io.mockk.impl.annotations.InjectMockKs
@@ -11,7 +10,6 @@ import io.mockk.impl.annotations.MockK
 import io.mockk.junit5.MockKExtension
 import org.junit.jupiter.api.assertThrows
 import org.junit.jupiter.api.extension.ExtendWith
-import java.util.UUID
 import kotlin.test.Test
 
 
@@ -28,18 +26,15 @@ class SwitchAccountServiceTest(
     @Test
     fun `shouldReturnAccountOnWhenOnWasRequested`() {
 
-        val user = UserFactory.generateUser()
+        val userOn = UserFactory.generateUserAccountOn()
 
-        val dto = RequestSwitchAccountDto(
-            customerId = user.customerId,
-            switchAccount = "on"
-        )
+        val dtoOn = DtoFactory.generateDtoAccountOn()
 
-        every { userRepository.findByCustomerId(dto.customerId) }.returns(user)
-        every { userRepository.save(user) }.returns(user)
-        every { userRepository.save(user) }.returns(user)
+        every { userRepository.findByCustomerId(dtoOn.customerId) }.returns(userOn)
+        every { userRepository.save(userOn) }.returns(userOn)
+        every { userRepository.save(userOn) }.returns(userOn)
 
-        val result = switchAccountService.switchAccount(dto)
+        val result = switchAccountService.switchAccount(dtoOn)
 
         assert(result == "Account on")
     }
@@ -47,20 +42,9 @@ class SwitchAccountServiceTest(
     @Test
     fun `shouldReturnAccountOffWhenOffWasRequested`() {
 
-        val userOff = UserModel(
-            customerId = UUID.randomUUID().toString(),
-            fullName = "Ana",
-            safepayUserId = 3,
-            creditFlg = false,
-            accountFlg = false,
-            prepaidFlg = false,
-            cpf = "09876543212",
-        )
+        val userOff = UserFactory.generateUserAccountOff()
 
-        val dtoOff = RequestSwitchAccountDto(
-            customerId = userOff.customerId,
-            switchAccount = "off"
-        )
+        val dtoOff = DtoFactory.generateDtoAccountOff()
 
         every { userRepository.findByCustomerId(dtoOff.customerId) }.returns(userOff)
         every { userRepository.save(userOff) }.returns(userOff)
@@ -74,27 +58,16 @@ class SwitchAccountServiceTest(
     @Test
     fun `shouldThrowInvalidRequestException`() {
 
-        val user = UserModel(
-            customerId = UUID.randomUUID().toString(),
-            fullName = "Carol",
-            safepayUserId = 4,
-            creditFlg = false,
-            accountFlg = false,
-            prepaidFlg = false,
-            cpf = "90876512354"
-        )
+        val userException = UserFactory.generateUserException()
 
-        val dto = RequestSwitchAccountDto(
-            customerId = UUID.randomUUID().toString(),
-            switchAccount = "batata"
-        )
+        val dtoException = DtoFactory.generateDtoException()
 
-        every { userRepository.findByCustomerId(dto.customerId) }.returns(user)
-        every { userRepository.save(user) }.returns(user)
-        every { userRepository.save(user) }.returns(user)
+        every { userRepository.findByCustomerId(dtoException.customerId) }.returns(userException)
+        every { userRepository.save(userException) }.returns(userException)
+        every { userRepository.save(userException) }.returns(userException)
 
         assertThrows<InvalidRequestException> {
-            switchAccountService.switchAccount(dto)
+            switchAccountService.switchAccount(dtoException)
         }
     }
 }
