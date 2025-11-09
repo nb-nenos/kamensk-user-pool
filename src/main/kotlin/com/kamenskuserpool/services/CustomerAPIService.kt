@@ -15,11 +15,23 @@ class CustomerAPIService(
     private val logger = LoggerFactory.getLogger(UserService::class.java)
 
     fun createUser(userDto: UserDto): ResponseUserDto {
-        try {
-            return customerAPIClient.createUser(userDto)
-        } catch (ex: FeignException) {
+        return runCatching {
+            customerAPIClient.createUser(userDto)
+        }.onSuccess {
+            logger.info("Usuário criado com sucesso na API externa: ${it.customerId}")
+        }.onFailure {
             logger.error("Error: falha ao comunicar com a API externa.")
+        }.getOrElse {
             throw ClientException()
         }
     }
 }
+
+
+
+//try {
+//    return customerAPIClient.createUser(userDto)
+//} catch (ex: FeignException) {
+//    logger.error("Error: falha ao comunicar com a API externa.")
+//    throw ClientException()
+//}

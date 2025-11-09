@@ -4,7 +4,6 @@ import com.kamenskuserpool.clients.SafepayUserIdClient
 import com.kamenskuserpool.dtos.ResponseSafepayUserIdDto
 import com.kamenskuserpool.dtos.UserDto
 import com.kamenskuserpool.exceptions.SafepayUserIdException
-import feign.FeignException
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
 
@@ -15,11 +14,22 @@ class SafepayUserIdService(
     private val logger = LoggerFactory.getLogger(UserService::class.java)
 
     fun createSafepayUserId(userDto: UserDto): ResponseSafepayUserIdDto {
-        try {
-            return safepayUserIdClient.getSafepayUserId(userDto.email)
-        } catch (ex: FeignException) {
+        return runCatching {
+            safepayUserIdClient.getSafepayUserId(userDto.email)
+        }.onSuccess {
+            logger.info("O id do safepay foi criado com sucesso para o email: ${userDto.email}")  // mensageria??
+        }.onFailure { ex ->
             logger.error("Error: falha ao comunicar com a API externa.")
+        }.getOrElse {
             throw SafepayUserIdException()
         }
     }
 }
+
+
+//try {
+//    return safepayUserIdClient.getSafepayUserId(userDto.email)
+//} catch (ex: FeignException) {
+//    logger.error("Error: falha ao comunicar com a API externa.")
+//    throw SafepayUserIdException()
+//}

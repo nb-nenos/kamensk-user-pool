@@ -35,7 +35,7 @@ class UserService(
 
         userRepository.save(userModel)
 
-        logger.info("User created successfully! ID: {userModel.id}")
+        logger.info("User created successfully! ID: ${userModel.id}")
     }
 
     fun getRandomUsers(): UserModel {
