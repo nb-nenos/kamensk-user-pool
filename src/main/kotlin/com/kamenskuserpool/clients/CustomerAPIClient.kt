@@ -1,6 +1,6 @@
 package com.kamenskuserpool.clients
 
-import com.kamenskuserpool.dtos.ResponseUserDto
+import com.kamenskuserpool.dtos.ResponseCustomerAPIDto
 import com.kamenskuserpool.dtos.UserDto
 import org.springframework.cloud.openfeign.FeignClient
 import org.springframework.web.bind.annotation.PostMapping
@@ -10,5 +10,5 @@ import org.springframework.web.bind.annotation.RequestBody
 interface CustomerAPIClient {
 
     @PostMapping("/create-user")
-    fun createUser(@RequestBody payload: UserDto): ResponseUserDto
+    fun createUser(@RequestBody payload: UserDto): ResponseCustomerAPIDto
 }
