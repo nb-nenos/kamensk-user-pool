@@ -56,9 +56,21 @@ object UserFactory {
             creditFlg = false
         )
 
-    fun generateUserPrepaid(): UserModel =
+    fun generateUserPrepaidOn(): UserModel =
         UserModel(
-            customerId = UUID.randomUUID().toString()
+            customerId = UUID.randomUUID().toString(),
+            prepaidFlg = false
+        )
 
+    fun generateUserPrepaidOff(): UserModel =
+        UserModel(
+            customerId = UUID.randomUUID().toString(),
+            prepaidFlg = true
+        )
+
+    fun generateUserPrepaidException(): UserModel =
+        UserModel(
+            customerId = UUID.randomUUID().toString(),
+            prepaidFlg = false
         )
 }

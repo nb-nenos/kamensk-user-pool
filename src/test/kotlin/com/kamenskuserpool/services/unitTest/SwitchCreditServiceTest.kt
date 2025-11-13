@@ -38,7 +38,6 @@ class SwitchCreditServiceTest {
         assert(result == "Credit On")
         assert(userOn.creditFlg == true)
         verify(exactly = 1) { userRepository.save(userOn) }
-
     }
 
     @Test

@@ -2,6 +2,7 @@ package com.kamenskuserpool.utils
 
 import com.kamenskuserpool.dtos.RequestSwitchAccountDto
 import com.kamenskuserpool.dtos.RequestSwitchCreditDto
+import com.kamenskuserpool.dtos.RequestSwitchPrepaidDto
 import java.util.UUID
 
 object DtoFactory {
@@ -39,6 +40,24 @@ object DtoFactory {
     fun generateDtoCreditException(): RequestSwitchCreditDto =
         RequestSwitchCreditDto(
             customerId = UUID.randomUUID().toString(),
-            switchCredit = ""
+            switchCredit = ".."
+        )
+
+    fun generateDtoPrepaidOn(): RequestSwitchPrepaidDto =
+        RequestSwitchPrepaidDto(
+            customerId = UUID.randomUUID().toString(),
+            switchPrepaid = "on"
+        )
+
+    fun generateDtoPrepaidOff(): RequestSwitchPrepaidDto =
+        RequestSwitchPrepaidDto(
+            customerId = UUID.randomUUID().toString(),
+            switchPrepaid = "off"
+        )
+
+    fun generateDtoPrepaidException(): RequestSwitchPrepaidDto =
+        RequestSwitchPrepaidDto(
+            customerId = UUID.randomUUID().toString(),
+            switchPrepaid = "..."
         )
 }
