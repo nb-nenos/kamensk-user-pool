@@ -1,6 +1,7 @@
 package com.kamenskuserpool.utils
 
 import com.kamenskuserpool.dtos.RequestSwitchAccountDto
+import com.kamenskuserpool.dtos.RequestSwitchCreditDto
 import java.util.UUID
 
 object DtoFactory {
@@ -17,9 +18,27 @@ object DtoFactory {
             switchAccount = "off"
         )
 
-    fun generateDtoException(): RequestSwitchAccountDto =
+    fun generateDtoAccountException(): RequestSwitchAccountDto =
         RequestSwitchAccountDto(
             customerId = UUID.randomUUID().toString(),
             switchAccount = "batata"
+        )
+
+    fun generateDtoCreditOn(): RequestSwitchCreditDto =
+        RequestSwitchCreditDto(
+            customerId = UUID.randomUUID().toString(),
+            switchCredit = "on"
+        )
+
+    fun generateDtoCreditOff(): RequestSwitchCreditDto =
+        RequestSwitchCreditDto(
+            customerId = UUID.randomUUID().toString(),
+            switchCredit = "off"
+        )
+
+    fun generateDtoCreditException(): RequestSwitchCreditDto =
+        RequestSwitchCreditDto(
+            customerId = UUID.randomUUID().toString(),
+            switchCredit = ""
         )
 }

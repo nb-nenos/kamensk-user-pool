@@ -27,7 +27,7 @@ object UserFactory {
             cpf = "09876543212",
         )
 
-    fun generateUserException(): UserModel =
+    fun generateUserAccountException(): UserModel =
         UserModel(
             customerId = UUID.randomUUID().toString(),
             fullName = "Carol",
@@ -36,5 +36,29 @@ object UserFactory {
             accountFlg = false,
             prepaidFlg = false,
             cpf = "90876512354"
+        )
+
+    fun generateUserCreditOn(): UserModel =
+        UserModel(
+            customerId = UUID.randomUUID().toString(),
+            creditFlg = false
+        )
+
+    fun generateUserCreditOff(): UserModel =
+        UserModel(
+            customerId = UUID.randomUUID().toString(),
+            creditFlg = true
+        )
+
+    fun generateUserCreditException(): UserModel =
+        UserModel(
+            customerId = UUID.randomUUID().toString(),
+            creditFlg = false
+        )
+
+    fun generateUserPrepaid(): UserModel =
+        UserModel(
+            customerId = UUID.randomUUID().toString()
+
         )
 }

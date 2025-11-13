@@ -1,7 +1,8 @@
-package com.kamenskuserpool.services
+package com.kamenskuserpool.services.unitTest
 
 import com.kamenskuserpool.exceptions.InvalidRequestException
 import com.kamenskuserpool.repositories.UserRepository
+import com.kamenskuserpool.services.SwitchAccountService
 import com.kamenskuserpool.utils.DtoFactory
 import com.kamenskuserpool.utils.UserFactory
 import io.mockk.every
@@ -11,7 +12,6 @@ import io.mockk.junit5.MockKExtension
 import org.junit.jupiter.api.assertThrows
 import org.junit.jupiter.api.extension.ExtendWith
 import kotlin.test.Test
-
 
 @ExtendWith(MockKExtension::class)
 class SwitchAccountServiceTest(
@@ -58,12 +58,11 @@ class SwitchAccountServiceTest(
     @Test
     fun `shouldThrowInvalidRequestException`() {
 
-        val userException = UserFactory.generateUserException()
+        val userException = UserFactory.generateUserAccountException()
 
-        val dtoException = DtoFactory.generateDtoException()
+        val dtoException = DtoFactory.generateDtoAccountException()
 
         every { userRepository.findByCustomerId(dtoException.customerId) }.returns(userException)
-        every { userRepository.save(userException) }.returns(userException)
         every { userRepository.save(userException) }.returns(userException)
 
         assertThrows<InvalidRequestException> {
