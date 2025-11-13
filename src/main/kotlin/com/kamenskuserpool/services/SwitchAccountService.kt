@@ -15,16 +15,20 @@ class SwitchAccountService(
         val customerAccount = userRepository.findByCustomerId(switchAccountPayload.customerId)
             ?: throw UserNotFoundException()
 
-        if (switchAccountPayload.switchAccount == "on") {
-            customerAccount.accountFlg = true
-            userRepository.save(customerAccount)
-            return "Account on"
-        } else if (switchAccountPayload.switchAccount == "off") {
-            customerAccount.accountFlg = false
-            userRepository.save(customerAccount)
-            return "Account off"
-        } else {
-            throw InvalidRequestException("Insert a valid value (on, off)")
+        when (switchAccountPayload.switchAccount) {
+            "on" -> {
+                customerAccount.accountFlg = true
+                userRepository.save(customerAccount)
+                return "Account on"
+            }
+            "off" -> {
+                customerAccount.accountFlg = false
+                userRepository.save(customerAccount)
+                return "Account off"
+            }
+            else -> {
+                throw InvalidRequestException("Insert a valid value (on, off)")
+            }
         }
     }
 }

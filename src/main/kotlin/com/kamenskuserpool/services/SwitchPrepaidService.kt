@@ -15,16 +15,21 @@ class SwitchPrepaidService(
         val customer = userRepository.findByCustomerId(switchPrepaidPayload.customerId)
             ?: throw UserNotFoundException()
 
-        if (switchPrepaidPayload.switchPrepaid == "on") {
-            customer.prepaidFlg = true
-            userRepository.save(customer)
-            return "Prepaid On"
-        } else if (switchPrepaidPayload.switchPrepaid == "off") {
-            customer.prepaidFlg = false
-            userRepository.save(customer)
-            return "Prepaid Off"
-        } else {
-            throw SwitchFlagException()
+
+        when (switchPrepaidPayload.switchPrepaid) {
+            "on" -> {
+                customer.prepaidFlg = true
+                userRepository.save(customer)
+                return "Prepaid On"
+            }
+            "off" -> {
+                customer.prepaidFlg = false
+                userRepository.save(customer)
+                return "Prepaid Off"
+            }
+            else -> {
+                throw SwitchFlagException()
+            }
         }
     }
 }

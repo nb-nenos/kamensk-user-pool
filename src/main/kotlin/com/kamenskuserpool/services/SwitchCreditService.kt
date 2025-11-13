@@ -15,16 +15,20 @@ class SwitchCreditService(
         val creditCustomer = userRepository.findByCustomerId(switchCreditPayload.customerId)
             ?: throw UserNotFoundException()
 
-        if (switchCreditPayload.switchCredit == "on") {
-            creditCustomer.creditFlg = true
-            userRepository.save(creditCustomer)
-            return "Credit On"
-        } else if (switchCreditPayload.switchCredit == "off") {
-            creditCustomer.creditFlg = false
-            userRepository.save(creditCustomer)
-            return "Credit Off"
-        } else {
-            throw SwitchFlagException()
+        when (switchCreditPayload.switchCredit) {
+            "on" -> {
+                creditCustomer.creditFlg = true
+                userRepository.save(creditCustomer)
+                return "Credit On"
+            }
+            "off" -> {
+                creditCustomer.creditFlg = false
+                userRepository.save(creditCustomer)
+                return "Credit Off"
+            }
+            else -> {
+                throw SwitchFlagException()
+            }
         }
     }
 }
