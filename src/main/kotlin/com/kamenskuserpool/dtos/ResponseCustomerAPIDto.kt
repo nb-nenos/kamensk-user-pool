@@ -1,6 +1,6 @@
 package com.kamenskuserpool.dtos
 
-data class ResponseUserDto(
+data class ResponseCustomerAPIDto(
     val customerId: String,
     val localStamp: String
 )
