@@ -13,23 +13,12 @@ class SafepayUserIdService(
 ) {
     private val logger = LoggerFactory.getLogger(UserService::class.java)
 
-    fun createSafepayUserId(userDto: UserDto): ResponseSafepayUserIdDto {
+    fun createSafepayUserId(userDto: UserDto): ResponseSafepayUserIdDto{
         return runCatching {
             safepayUserIdClient.getSafepayUserId(userDto.email)
-        }.onSuccess {
-            logger.info("O id do safepay foi criado com sucesso para o email: ${userDto.email}")  // mensageria??
-        }.onFailure { ex ->
+        }.onFailure {
             logger.error("Error: falha ao comunicar com a API externa.")
-        }.getOrElse {
             throw SafepayUserIdException()
-        }
+        }.getOrThrow()
     }
 }
-
-
-//try {
-//    return safepayUserIdClient.getSafepayUserId(userDto.email)
-//} catch (ex: FeignException) {
-//    logger.error("Error: falha ao comunicar com a API externa.")
-//    throw SafepayUserIdException()
-//}
