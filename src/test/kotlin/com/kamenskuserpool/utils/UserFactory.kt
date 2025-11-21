@@ -1,7 +1,7 @@
 package com.kamenskuserpool.utils
 
 import com.kamenskuserpool.models.UserModel
-import java.util.UUID
+import java.util.*
 
 object UserFactory {
 

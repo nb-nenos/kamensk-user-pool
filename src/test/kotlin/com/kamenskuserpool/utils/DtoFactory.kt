@@ -1,8 +1,12 @@
 package com.kamenskuserpool.utils
 
+import com.kamenskuserpool.configs.properties.AddressProperties
+import com.kamenskuserpool.configs.properties.PhoneNumberProperties
 import com.kamenskuserpool.dtos.RequestSwitchAccountDto
 import com.kamenskuserpool.dtos.RequestSwitchCreditDto
 import com.kamenskuserpool.dtos.RequestSwitchPrepaidDto
+import com.kamenskuserpool.dtos.UserDto
+import com.kamenskuserpool.enums.UserTypeEnum
 import java.util.UUID
 
 object DtoFactory {
@@ -59,5 +63,35 @@ object DtoFactory {
         RequestSwitchPrepaidDto(
             customerId = UUID.randomUUID().toString(),
             switchPrepaid = "..."
+        )
+
+    fun generateDtoCustomerAPI(): UserDto =
+        UserDto(
+            fullName = "Anna Souza",
+            dateOfBirth = "28/05/2025",
+            cpf = "678234562191",
+            email = "anna@email.com",
+            password = "1234",
+            motherName = "Clara",
+            address = listOf(
+                AddressProperties(
+                    street = "Rua das Flores",
+                    district = "Vila Mariana",
+                    number = "123",
+                    complement = "Apto 1",
+                    postalCode = "89011-546",
+                    state = "SP",
+                    city = "Sao Paulo"
+                )
+            ),
+            phoneNumber = listOf(
+                PhoneNumberProperties(
+                    countryCode = "+55",
+                    areaCode = "11",
+                    number = "983216723"
+                )
+            ),
+            type = UserTypeEnum.PF,
+            safetyPhrase = "Qual a sua fruta favorita?"
         )
 }
