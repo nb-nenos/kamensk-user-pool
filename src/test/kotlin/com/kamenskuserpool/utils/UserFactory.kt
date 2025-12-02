@@ -5,7 +5,7 @@ import com.kamenskuserpool.configs.properties.PhoneNumberProperties
 import com.kamenskuserpool.dtos.UserDto
 import com.kamenskuserpool.enums.UserTypeEnum
 import com.kamenskuserpool.models.UserModel
-import java.util.UUID
+import java.util.*
 
 object UserFactory {
 

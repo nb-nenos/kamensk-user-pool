@@ -1,11 +1,13 @@
 package com.kamenskuserpool.utils
 
-import com.kamenskuserpool.dtos.ResponseSafepayUserIdDto
+import com.kamenskuserpool.dtos.ResponseCustomerAPIDto
+import java.util.*
 
 object ResponseFactory {
 
-    fun generateSafepayResponse(): ResponseSafepayUserIdDto =
-        ResponseSafepayUserIdDto(
-            SafePayUserId = 9876543212345
+    fun generateCustomerAPIResponse(): ResponseCustomerAPIDto =
+        ResponseCustomerAPIDto (
+            customerId = UUID.randomUUID().toString(),
+            localStamp = "2025-05-28T14:30"
         )
 }
