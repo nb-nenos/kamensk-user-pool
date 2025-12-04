@@ -75,7 +75,7 @@ object DtoFactory {
             motherName = "Clara",
             address = listOf(
                 AddressProperties(
-                    street = "Rua das Flores",
+                    streetName = "Rua das Flores",
                     district = "Vila Mariana",
                     number = "123",
                     complement = "Apto 1",

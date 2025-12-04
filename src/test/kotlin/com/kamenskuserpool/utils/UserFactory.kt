@@ -81,7 +81,7 @@ object UserFactory {
     fun generateSafepayUserId(): UserDto =
         UserDto(
             fullName = "Bruna",
-            dateOfBirth = "28.05.2025",
+            dateOfBirth = "2025-05-28",
             cpf = "12345678990",
             email = "bruna@email.com",
             password = "2805",
@@ -92,7 +92,7 @@ object UserFactory {
                 district = "São Judas",
                 number = "213",
                 complement = "apt 80",
-                postalCode = "4380817",
+                postalCode = "04380817",
                 state = "São Paulo",
                 city = "São Paulo"
                 )
@@ -106,6 +106,35 @@ object UserFactory {
             ),
             type = UserTypeEnum.PF,
             safetyPhrase = "pergunta aqui"
+        )
 
+    fun buildUserDto(): UserDto =
+        UserDto(
+            fullName = "Bruna",
+            dateOfBirth = "2025-05-28",
+            cpf = "12341238990",
+            email = "brunaa@email.com",
+            password = "2805",
+            motherName = "Maezinha",
+            address = listOf(
+                AddressProperties(
+                    streetName = "Rua das Rochas",
+                    district = "Saúde",
+                    number = "213",
+                    complement = "apt 70",
+                    postalCode = "04090237",
+                    state = "São Paulo",
+                    city = "São Paulo"
+                )
+            ),
+            phoneNumber = listOf(
+                PhoneNumberProperties(
+                    countryCode = "55",
+                    areaCode = "11",
+                    number = "983987562"
+                )
+            ),
+            type = UserTypeEnum.PF,
+            safetyPhrase = "pergunte aqui"
         )
 }
