@@ -1,9 +1,15 @@
 package com.kamenskuserpool.utils
 
 import com.kamenskuserpool.dtos.ResponseCustomerAPIDto
+import com.kamenskuserpool.dtos.ResponsePsCoreDto
 import java.util.*
 
 object ResponseFactory {
+
+    fun generateSafepayAPIResponse(): ResponsePsCoreDto =
+        ResponsePsCoreDto (
+          safePayUserId = 42143243234232
+        )
 
     fun generateCustomerAPIResponse(): ResponseCustomerAPIDto =
         ResponseCustomerAPIDto (

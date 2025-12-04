@@ -15,7 +15,7 @@ class UserService(
     private val customerAPIService: CustomerAPIService,
     private val userRepository: UserRepository,
     private val userUtils: UserUtils,
-    private val safepayUserIdService: SafepayUserIdService
+    private val psCoreService: PsCoreService
 ) {
 
     private val logger = LoggerFactory.getLogger(UserService::class.java)
@@ -27,9 +27,9 @@ class UserService(
 
         val createUserClientResponse = customerAPIService.createUser(userDto)
 
-        val safepayUserId = safepayUserIdService.createSafepayUserId(userDto)
+        val safepayUserId = psCoreService.createSafepayUserId(userDto)
 
-        val userModel = userDto.toUserModel(createUserClientResponse.customerId, safepayUserId.SafePayUserId)
+        val userModel = userDto.toUserModel(createUserClientResponse.customerId, safepayUserId.safePayUserId)
 
         logger.info("Saving user in data base.")
 
