@@ -1,30 +1,51 @@
 package com.kamenskuserpool.services.unitTest
 
+import com.kamenskuserpool.clients.CustomerAPIClient
+import com.kamenskuserpool.exceptions.ClientException
 import com.kamenskuserpool.services.CustomerAPIService
-import com.kamenskuserpool.utils.DtoFactory
+import com.kamenskuserpool.utils.ResponseFactory
 import com.kamenskuserpool.utils.UserFactory
+import io.mockk.every
 import io.mockk.impl.annotations.InjectMockKs
 import io.mockk.impl.annotations.MockK
 import io.mockk.junit5.MockKExtension
+import org.junit.jupiter.api.Assertions.assertThrows
 import org.junit.jupiter.api.extension.ExtendWith
 import kotlin.test.Test
+import kotlin.test.assertEquals
 
 @ExtendWith(MockKExtension::class)
-class CustomerAPIServiceTest {
+class CustomerAPIServiceTest(
 
     @MockK
-    lateinit var customerAPIService: CustomerAPIService
+    private val customerAPIClient: CustomerAPIClient,
 
     @InjectMockKs
-    lateinit var creditServiceTest: SwitchCreditServiceTest
+    private val customerAPIService: CustomerAPIService
+) {
 
     @Test
-    fun `shouldReturnAResponseWhenClientRespondWithSuccess`() {
+    fun `shouldReturnResponseWhenAPIReturnsSuccess`() {
 
-        val user = UserFactory
+        val user = UserFactory.buildUserDto()
+        val response = ResponseFactory.generateCustomerAPIResponse()
 
-        val dto = DtoFactory.generateDtoCustomerAPI()
+        every { customerAPIClient.createUser(user) } returns response
 
-        val result = customerAPIService.createUser(dto)
+        val result =  customerAPIService.createUser(user)
+
+        assertEquals(response, result)
+    }
+
+    @Test
+    fun `shouldThrowExceptionWhenAPIFails`() {
+
+        val user = UserFactory.buildUserDto()
+
+        every { customerAPIClient.createUser(user) } throws RuntimeException("API error")
+
+        assertThrows(ClientException::class.java) {
+            customerAPIService.createUser(user)
+        }
     }
 }
