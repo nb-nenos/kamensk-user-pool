@@ -1,10 +1,9 @@
 package com.kamenskuserpool.utils.stubs
 
-import com.github.tomakehurst.wiremock.client.WireMock.aResponse
-import com.github.tomakehurst.wiremock.client.WireMock.post
-import com.github.tomakehurst.wiremock.client.WireMock.stubFor
-import com.github.tomakehurst.wiremock.client.WireMock.urlEqualTo
+import com.github.tomakehurst.wiremock.client.WireMock.*
+import org.springframework.stereotype.Component
 
+@Component
 class StubCustomerAPI {
 
     fun stubCustomerAPI() {
@@ -13,6 +12,7 @@ class StubCustomerAPI {
             post(urlEqualTo("/create-user"))
                 .willReturn(
                     aResponse()
+                        .withHeader("Content-Type", "application/json")
                         .withStatus(200)
                         .withBody(
                             """

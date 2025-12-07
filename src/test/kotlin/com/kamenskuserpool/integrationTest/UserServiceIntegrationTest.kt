@@ -16,15 +16,20 @@ class UserServiceIntegrationTest: AbstractIntegrationTest() {
     @Autowired
     lateinit var userService: UserService
 
+    @Autowired
+    lateinit var stubCustomerAPI: StubCustomerAPI
+
+    @Autowired
+    lateinit var stubPsCore: StubPsCore
+
 
     @Test
     fun `should create an user in database`() {
-        StubCustomerAPI().stubCustomerAPI()
-        StubPsCore().stubPsCore("test@email.com")
+        stubCustomerAPI.stubCustomerAPI()
+        stubPsCore.stubPsCore("neno%40email.com")
 
         userService.createUser()
 
         verify(postRequestedFor(urlEqualTo("/create-user")))
-
     }
 }
