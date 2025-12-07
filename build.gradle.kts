@@ -36,6 +36,8 @@ dependencies {
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     implementation("org.springframework.cloud:spring-cloud-starter-openfeign")
     implementation("com.h2database:h2")
+    implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
+
 
 
 
@@ -48,6 +50,8 @@ dependencies {
     testImplementation("io.mockk:mockk:1.13.12")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
     testImplementation("org.springframework.cloud:spring-cloud-contract-wiremock")
+    testImplementation("com.fasterxml.jackson.module:jackson-module-kotlin")
+
 
 }
 
