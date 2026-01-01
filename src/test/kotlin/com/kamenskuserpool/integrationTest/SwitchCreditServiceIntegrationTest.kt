@@ -4,6 +4,7 @@ import com.kamenskuserpool.dtos.RequestSwitchCreditDto
 import com.kamenskuserpool.models.UserModel
 import com.kamenskuserpool.repositories.UserRepository
 import com.kamenskuserpool.services.SwitchCreditService
+import com.kamenskuserpool.services.UserService
 import jakarta.transaction.Transactional
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
@@ -21,12 +22,12 @@ class SwitchCreditServiceIntegrationTest {
     lateinit var switchCreditService: SwitchCreditService
 
     @Autowired
-    lateinit var userRepository: UserRepository
+    lateinit var userService: UserService
 
     @Test
     fun `should switch credit ON`() {
 
-        val user = userRepository.save(
+        val user = userService.save(
             UserModel(
                 customerId = UUID.randomUUID().toString(),
                 creditFlg = false
@@ -40,7 +41,7 @@ class SwitchCreditServiceIntegrationTest {
 
         val response = switchCreditService.switchCredit(dto)
 
-        val updateUser = userRepository.findByCustomerId(user.customerId)
+        val updateUser = userService.findByCustomerId(user.customerId)
 
         assertEquals("Credit Off", response)
         assertEquals(updateUser!!.creditFlg, true)
@@ -49,7 +50,7 @@ class SwitchCreditServiceIntegrationTest {
     @Test
     fun `should switch credit OFF`() {
 
-        val user = userRepository.save(
+        val user = userService.save(
             UserModel(
                 customerId = UUID.randomUUID().toString(),
                 creditFlg = true
@@ -63,7 +64,7 @@ class SwitchCreditServiceIntegrationTest {
 
         val response = switchCreditService.switchCredit(dto)
 
-        val updateUser = userRepository.findByCustomerId(user.customerId)
+        val updateUser = userService.findByCustomerId(user.customerId)
 
         assertEquals("Credit Off", response)
         assertEquals(updateUser!!.creditFlg, false)

@@ -2,8 +2,8 @@ package com.kamenskuserpool.integrationTest
 
 import com.kamenskuserpool.dtos.RequestSwitchAccountDto
 import com.kamenskuserpool.models.UserModel
-import com.kamenskuserpool.repositories.UserRepository
 import com.kamenskuserpool.services.SwitchAccountService
+import com.kamenskuserpool.services.UserService
 import jakarta.transaction.Transactional
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
@@ -21,12 +21,12 @@ class SwitchAccountServiceIntegrationTest {
     lateinit var switchAccountService: SwitchAccountService
 
     @Autowired
-    lateinit var userRepository: UserRepository
+    lateinit var userService: UserService
 
     @Test
     fun `should switch account ON`() {
 
-        val user = userRepository.save(
+        val user = userService.save(
             UserModel(
                 customerId = UUID.randomUUID().toString(),
                 accountFlg = false
@@ -40,7 +40,7 @@ class SwitchAccountServiceIntegrationTest {
 
         val response = switchAccountService.switchAccount(dto)
 
-        val updateUser = userRepository.findByCustomerId(user.customerId)
+        val updateUser = userService.findByCustomerId(user.customerId)
 
         assertEquals("Account on", response)
         assertEquals(updateUser!!.accountFlg, true)
@@ -49,7 +49,7 @@ class SwitchAccountServiceIntegrationTest {
     @Test
     fun `should switch account OFF`() {
 
-        val user = userRepository.save(
+        val user = userService.save(
             UserModel(
                 customerId = UUID.randomUUID().toString(),
                 accountFlg = true
@@ -63,7 +63,7 @@ class SwitchAccountServiceIntegrationTest {
 
         val response = switchAccountService.switchAccount(dto)
 
-        val updateUser = userRepository.findByCustomerId(user.customerId)
+        val updateUser = userService.findByCustomerId(user.customerId)
 
         assertEquals("Account off", response)
         assertEquals(updateUser!!.accountFlg, false)
