@@ -1,10 +1,10 @@
 package com.kamenskuserpool.services.unitTest
 
+import com.kamenskuserpool.dtos.RequestSwitchCreditDto
 import com.kamenskuserpool.exceptions.SwitchFlagException
+import com.kamenskuserpool.models.UserModel
 import com.kamenskuserpool.repositories.UserRepository
 import com.kamenskuserpool.services.SwitchCreditService
-import com.kamenskuserpool.utils.DtoFactory
-import com.kamenskuserpool.utils.UserFactory
 import io.mockk.every
 import io.mockk.impl.annotations.InjectMockKs
 import io.mockk.impl.annotations.MockK
@@ -12,7 +12,11 @@ import io.mockk.junit5.MockKExtension
 import io.mockk.verify
 import org.junit.jupiter.api.assertThrows
 import org.junit.jupiter.api.extension.ExtendWith
+import java.util.UUID
 import kotlin.test.Test
+import kotlin.test.assertEquals
+import kotlin.test.assertFalse
+import kotlin.test.assertTrue
 
 @ExtendWith(MockKExtension::class)
 class SwitchCreditServiceTest {
@@ -24,49 +28,84 @@ class SwitchCreditServiceTest {
     lateinit var switchCreditService: SwitchCreditService
 
     @Test
-    fun `shouldReturnCreditOnWhenOnWasRequested`() {
+    fun `should switch credit ON`() {
 
-        val userOn = UserFactory.generateUserCreditOn()
-        val dtoOn = DtoFactory.generateDtoCreditOn()
+        val user = UserModel(
+            customerId = UUID.randomUUID().toString(),
+            fullName = "Jaque Line",
+            safepayUserId = 287654321672345678L,
+            creditFlg = false,
+            accountFlg = false,
+            prepaidFlg = false,
+            cpf = "09876543212"
+        )
 
+        val dto = RequestSwitchCreditDto(
+            customerId = UUID.randomUUID().toString(),
+            switchCredit = "on"
+        )
 
-        every { userRepository.findByCustomerId(dtoOn.customerId) }.returns(userOn)
-        every { userRepository.save(userOn) }.returns(userOn)
+        every { userRepository.findByCustomerId(dto.customerId) }.returns(user)
+        every { userRepository.save(user) }.returns(user)
 
-        val result = switchCreditService.switchCredit(dtoOn)
+        val result = switchCreditService.switchCredit(dto)
 
-        assert(result == "Credit On")
-        assert(userOn.creditFlg == true)
-        verify(exactly = 1) { userRepository.save(userOn) }
+        assertEquals(result, "Credit On")
+        assertTrue { user.creditFlg }
+        verify(exactly = 1) { userRepository.save(user) }
     }
 
     @Test
-    fun `shouldReturnCreditOffWhenffWasRequested`() {
+    fun `should switch credit OFF`() {
 
-        val userOff = UserFactory.generateUserCreditOff()
-        val dtoOff = DtoFactory.generateDtoCreditOff()
+        val user = UserModel(
+            customerId = UUID.randomUUID().toString(),
+            fullName = "Fulano de Tal",
+            safepayUserId = 387654321672395678L,
+            creditFlg = true,
+            accountFlg = false,
+            prepaidFlg = false,
+            cpf = "56789012345"
+        )
 
-        every { userRepository.findByCustomerId(dtoOff.customerId) }.returns(userOff)
-        every { userRepository.save(userOff) }.returns(userOff)
+        val dto = RequestSwitchCreditDto(
+            customerId = UUID.randomUUID().toString(),
+            switchCredit = "off"
+        )
 
-        val result = switchCreditService.switchCredit(dtoOff)
+        every { userRepository.findByCustomerId(dto.customerId) }.returns(user)
+        every { userRepository.save(user) }.returns(user)
 
-        assert(result == "Credit Off")
-        assert(!userOff.creditFlg)
-        verify(exactly = 1) { userRepository.save(userOff) }
+        val result = switchCreditService.switchCredit(dto)
+
+        assertEquals(result, "Credit Off")
+        assertFalse { user.creditFlg }
+        verify(exactly = 1) { userRepository.save(user) }
     }
 
     @Test
-    fun `shouldThrowInvalidRequestException`() {
+    fun `should throw an Exception`() {
 
-        val userException = UserFactory.generateUserCreditException()
-        val dtoException = DtoFactory.generateDtoCreditException()
+        val user = UserModel(
+            customerId = UUID.randomUUID().toString(),
+            fullName = "Ciclano",
+            safepayUserId = 887654321672395670L,
+            creditFlg = false,
+            accountFlg = false,
+            prepaidFlg = false,
+            cpf = "78901234567"
+        )
 
-        every { userRepository.findByCustomerId(dtoException.customerId) }.returns(userException)
-        every { userRepository.save(userException) }.returns(userException)
+        val dto = RequestSwitchCreditDto(
+            customerId = user.customerId,
+            switchCredit = "Credit exception"
+        )
+
+        every { userRepository.findByCustomerId(dto.customerId) }.returns(user)
+        every { userRepository.save(user) }.returns(user)
 
         assertThrows<SwitchFlagException> {
-            switchCreditService.switchCredit(dtoException)
+            switchCreditService.switchCredit(dto)
         }
     }
 }
