@@ -3,27 +3,26 @@ package com.kamenskuserpool.services
 import com.kamenskuserpool.dtos.RequestSwitchAccountDto
 import com.kamenskuserpool.exceptions.InvalidRequestException
 import com.kamenskuserpool.exceptions.UserNotFoundException
-import com.kamenskuserpool.repositories.UserRepository
 import org.springframework.stereotype.Service
 
 @Service
 class SwitchAccountService(
-    private val userRepository: UserRepository,
+    private val userService: UserService,
 ) {
 
     fun switchAccount(switchAccountPayload: RequestSwitchAccountDto): String {
-        val customerAccount = userRepository.findByCustomerId(switchAccountPayload.customerId)
+        val customerAccount = userService.findByCustomerId(switchAccountPayload.customerId)
             ?: throw UserNotFoundException()
 
         when (switchAccountPayload.switchAccount) {
             "on" -> {
                 customerAccount.accountFlg = true
-                userRepository.save(customerAccount)
+                userService.save(customerAccount)
                 return "Account on"
             }
             "off" -> {
                 customerAccount.accountFlg = false
-                userRepository.save(customerAccount)
+                userService.save(customerAccount)
                 return "Account off"
             }
             else -> {
