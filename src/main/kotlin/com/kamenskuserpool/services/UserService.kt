@@ -64,4 +64,12 @@ class UserService(
                 throw PrepaidNotFoundException()
             }
     }
+
+    fun findByCustomerId(customerId: String): UserModel {
+        return userRepository.findByCustomerId(customerId) ?: throw Exception("User not found.")
+    }
+
+    fun save(user: UserModel): UserModel {
+        return userRepository.save(user)
+    }
 }
