@@ -3,8 +3,8 @@ package com.kamenskuserpool.services.unitTest
 import com.kamenskuserpool.dtos.RequestSwitchAccountDto
 import com.kamenskuserpool.exceptions.SwitchFlagException
 import com.kamenskuserpool.models.UserModel
-import com.kamenskuserpool.repositories.UserRepository
 import com.kamenskuserpool.services.SwitchAccountService
+import com.kamenskuserpool.services.UserService
 import io.mockk.every
 import io.mockk.impl.annotations.InjectMockKs
 import io.mockk.impl.annotations.MockK
@@ -22,7 +22,7 @@ import kotlin.test.assertTrue
 class SwitchAccountServiceTest {
 
     @MockK
-    lateinit var userRepository: UserRepository
+    lateinit var userService: UserService
 
     @InjectMockKs
     lateinit var switchAccountService: SwitchAccountService
@@ -45,14 +45,14 @@ class SwitchAccountServiceTest {
             switchAccount = "on"
         )
 
-        every { userRepository.findByCustomerId(dto.customerId) }.returns(user)
-        every { userRepository.save(user) }.returns(user)
+        every { userService.findByCustomerId(dto.customerId) }.returns(user)
+        every { userService.save(user) }.returns(user)
 
         val result = switchAccountService.switchAccount(dto)
 
         assertEquals(result, "Account on")
         assertTrue { user.accountFlg }
-        verify(exactly = 1) { userRepository.save(user) }
+        verify(exactly = 1) { userService.save(user) }
     }
 
     @Test
@@ -73,14 +73,14 @@ class SwitchAccountServiceTest {
             switchAccount = "off"
         )
 
-        every { userRepository.findByCustomerId(dto.customerId) }.returns(user)
-        every { userRepository.save(user) }.returns(user)
+        every { userService.findByCustomerId(dto.customerId) }.returns(user)
+        every { userService.save(user) }.returns(user)
 
         val result = switchAccountService.switchAccount(dto)
 
         assertEquals(result, "Account off")
         assertFalse { user.accountFlg }
-        verify(exactly = 1) { userRepository.save(user) }
+        verify(exactly = 1) { userService.save(user) }
     }
 
     @Test
@@ -101,8 +101,8 @@ class SwitchAccountServiceTest {
             switchAccount = "Account exception"
         )
 
-        every { userRepository.findByCustomerId(dto.customerId) }.returns(user)
-        every { userRepository.save(user) }.returns(user)
+        every { userService.findByCustomerId(dto.customerId) }.returns(user)
+        every { userService.save(user) }.returns(user)
 
         assertThrows<SwitchFlagException> {
             switchAccountService.switchAccount(dto)

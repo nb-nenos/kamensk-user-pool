@@ -5,6 +5,7 @@ import com.kamenskuserpool.exceptions.SwitchFlagException
 import com.kamenskuserpool.models.UserModel
 import com.kamenskuserpool.repositories.UserRepository
 import com.kamenskuserpool.services.SwitchCreditService
+import com.kamenskuserpool.services.UserService
 import io.mockk.every
 import io.mockk.impl.annotations.InjectMockKs
 import io.mockk.impl.annotations.MockK
@@ -22,7 +23,7 @@ import kotlin.test.assertTrue
 class SwitchCreditServiceTest {
 
     @MockK
-    lateinit var userRepository: UserRepository
+    lateinit var userService: UserService
 
     @InjectMockKs
     lateinit var switchCreditService: SwitchCreditService
@@ -45,14 +46,14 @@ class SwitchCreditServiceTest {
             switchCredit = "on"
         )
 
-        every { userRepository.findByCustomerId(dto.customerId) }.returns(user)
-        every { userRepository.save(user) }.returns(user)
+        every { userService.findByCustomerId(dto.customerId) }.returns(user)
+        every { userService.save(user) }.returns(user)
 
         val result = switchCreditService.switchCredit(dto)
 
         assertEquals(result, "Credit On")
         assertTrue { user.creditFlg }
-        verify(exactly = 1) { userRepository.save(user) }
+        verify(exactly = 1) { userService.save(user) }
     }
 
     @Test
@@ -73,14 +74,14 @@ class SwitchCreditServiceTest {
             switchCredit = "off"
         )
 
-        every { userRepository.findByCustomerId(dto.customerId) }.returns(user)
-        every { userRepository.save(user) }.returns(user)
+        every { userService.findByCustomerId(dto.customerId) }.returns(user)
+        every { userService.save(user) }.returns(user)
 
         val result = switchCreditService.switchCredit(dto)
 
         assertEquals(result, "Credit Off")
         assertFalse { user.creditFlg }
-        verify(exactly = 1) { userRepository.save(user) }
+        verify(exactly = 1) { userService.save(user) }
     }
 
     @Test
@@ -101,8 +102,8 @@ class SwitchCreditServiceTest {
             switchCredit = "Credit exception"
         )
 
-        every { userRepository.findByCustomerId(dto.customerId) }.returns(user)
-        every { userRepository.save(user) }.returns(user)
+        every { userService.findByCustomerId(dto.customerId) }.returns(user)
+        every { userService.save(user) }.returns(user)
 
         assertThrows<SwitchFlagException> {
             switchCreditService.switchCredit(dto)
