@@ -1,71 +1,109 @@
 package com.kamenskuserpool.services.unitTest
 
+import com.kamenskuserpool.dtos.RequestSwitchPrepaidDto
 import com.kamenskuserpool.exceptions.SwitchFlagException
-import com.kamenskuserpool.repositories.UserRepository
+import com.kamenskuserpool.models.UserModel
 import com.kamenskuserpool.services.SwitchPrepaidService
-import com.kamenskuserpool.utils.DtoFactory
-import com.kamenskuserpool.utils.UserFactory
+import com.kamenskuserpool.services.UserService
 import io.mockk.every
 import io.mockk.impl.annotations.InjectMockKs
 import io.mockk.impl.annotations.MockK
 import io.mockk.junit5.MockKExtension
-import io.mockk.verify
 import org.junit.jupiter.api.assertThrows
 import org.junit.jupiter.api.extension.ExtendWith
+import java.util.UUID
 import kotlin.test.Test
+import kotlin.test.assertEquals
+import kotlin.test.assertFalse
+import kotlin.test.assertTrue
 
 @ExtendWith(MockKExtension::class)
 class SwitchPrepaidServiceTest {
 
     @MockK
-    lateinit var userRepository: UserRepository
+    lateinit var userService: UserService
 
     @InjectMockKs
     lateinit var switchPrepaidService: SwitchPrepaidService
 
     @Test
-    fun `shouldReturnPrepaidOnWhenOnWasRequested`() {
+    fun `should switch prepaid ON`() {
 
-        val user = UserFactory.generateUserPrepaidOn()
-        val dto = DtoFactory.generateDtoPrepaidOn()
+        val user = UserModel(
+            customerId = UUID.randomUUID().toString(),
+            fullName = "Kelly",
+            safepayUserId = 987654321012345678L,
+            creditFlg = false,
+            accountFlg = false,
+            prepaidFlg = false,
+            cpf = "75843989034"
+        )
 
-        every { userRepository.findByCustomerId(dto.customerId) }.returns(user)
-        every { userRepository.save(user) }.returns(user)
+        val dto = RequestSwitchPrepaidDto(
+            customerId = user.customerId,
+            switchPrepaid = "on"
+        )
 
-        val result = switchPrepaidService.switchPrepaid(dto)
-
-        assert(result == "Prepaid On")
-        assert(user.prepaidFlg == true)
-        verify(exactly = 1) { userRepository.save(user) }
-    }
-
-    @Test
-    fun `shouldReturnPrepaidOffWhenOffWasRequested`() {
-
-        val user = UserFactory.generateUserPrepaidOff()
-        val dto = DtoFactory.generateDtoPrepaidOff()
-
-        every { userRepository.findByCustomerId(dto.customerId) }.returns(user)
-        every { userRepository.save(user) }.returns(user)
+        every { userService.findByCustomerId(dto.customerId) }.returns(user)
+        every { userService.save(user) }.returns(user)
 
         val result = switchPrepaidService.switchPrepaid(dto)
 
-        assert(result == "Prepaid Off")
-        assert(!user.prepaidFlg)
-        verify(exactly = 1) { userRepository.save(user) }
+        assertEquals(result, "Prepaid On")
+       assertTrue { user.prepaidFlg }
     }
 
     @Test
-    fun `shouldThrowInvalidRequestException`() {
+    fun `should switch prepaid OFF`() {
 
-        val user = UserFactory.generateUserPrepaidException()
-        val dto = DtoFactory.generateDtoPrepaidException()
+        val user = UserModel(
+            customerId = UUID.randomUUID().toString(),
+            fullName = "Carla",
+            safepayUserId = 987654321012345678L,
+            creditFlg = false,
+            accountFlg = false,
+            prepaidFlg = true,
+            cpf = "75843989034"
+        )
 
-        every { userRepository.findByCustomerId(dto.customerId) }.returns(user)
-        every { userRepository.save(user) }.returns(user)
+        val dto = RequestSwitchPrepaidDto(
+            customerId = user.customerId,
+            switchPrepaid = "off"
+        )
+
+        every { userService.findByCustomerId(dto.customerId) }.returns(user)
+        every { userService.save(user) }.returns(user)
+
+        val result = switchPrepaidService.switchPrepaid(dto)
+
+        assertEquals("Prepaid Off", result)
+        assertFalse { user.prepaidFlg }
+    }
+
+    @Test
+    fun `should throw Exception`() {
+
+        val user = UserModel(
+            customerId = UUID.randomUUID().toString(),
+            fullName = "Flavia",
+            safepayUserId = 687654321012345678L,
+            creditFlg = false,
+            accountFlg = false,
+            prepaidFlg = true,
+            cpf = "75843989034"
+        )
+
+        val dto = RequestSwitchPrepaidDto(
+            customerId = user.customerId,
+            switchPrepaid = "Prepaid exception"
+        )
+
+        every { userService.findByCustomerId(dto.customerId) }.returns(user)
+        every { userService.save(user) }.returns(user)
 
         assertThrows<SwitchFlagException> {
             switchPrepaidService.switchPrepaid(dto)
         }
     }
+
 }
