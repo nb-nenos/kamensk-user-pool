@@ -8,23 +8,21 @@ import org.springframework.stereotype.Service
 
 @Service
 class SwitchPrepaidService(
-    private val userRepository: UserRepository
+    private val userService: UserService
 ) {
 
     fun switchPrepaid(switchPrepaidPayload: RequestSwitchPrepaidDto): String {
-        val customer = userRepository.findByCustomerId(switchPrepaidPayload.customerId)
-            ?: throw UserNotFoundException()
-
+        val customer = userService.findByCustomerId(switchPrepaidPayload.customerId)
 
         when (switchPrepaidPayload.switchPrepaid) {
             "on" -> {
                 customer.prepaidFlg = true
-                userRepository.save(customer)
+                userService.save(customer)
                 return "Prepaid On"
             }
             "off" -> {
                 customer.prepaidFlg = false
-                userRepository.save(customer)
+                userService.save(customer)
                 return "Prepaid Off"
             }
             else -> {
