@@ -105,5 +105,4 @@ class SwitchPrepaidServiceTest {
             switchPrepaidService.switchPrepaid(dto)
         }
     }
-
 }
