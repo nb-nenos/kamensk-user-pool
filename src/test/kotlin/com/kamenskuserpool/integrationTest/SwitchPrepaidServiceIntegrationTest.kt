@@ -1,8 +1,8 @@
 package com.kamenskuserpool.integrationTest
 
-import com.kamenskuserpool.dtos.RequestSwitchCreditDto
+import com.kamenskuserpool.dtos.RequestSwitchPrepaidDto
 import com.kamenskuserpool.models.UserModel
-import com.kamenskuserpool.services.SwitchCreditService
+import com.kamenskuserpool.services.SwitchPrepaidService
 import com.kamenskuserpool.services.UserService
 import jakarta.transaction.Transactional
 import org.springframework.beans.factory.annotation.Autowired
@@ -15,62 +15,62 @@ import kotlin.test.assertEquals
 @SpringBootTest
 @ActiveProfiles("test")
 @Transactional
-class SwitchCreditServiceIntegrationTest {
+class SwitchPrepaidServiceIntegrationTest {
 
     @Autowired
-    lateinit var switchCreditService: SwitchCreditService
+    lateinit var switchPrepaidService: SwitchPrepaidService
 
     @Autowired
     lateinit var userService: UserService
 
     @Test
-    fun `should switch credit ON`() {
+    fun `should switch prepaid ON`() {
 
         val user = userService.save(
             UserModel(
                 customerId = UUID.randomUUID().toString(),
-                creditFlg = false
+                prepaidFlg = false
             )
         )
 
-        val dto = RequestSwitchCreditDto(
+        val dto = RequestSwitchPrepaidDto(
             customerId = user.customerId,
-            switchCredit = "on"
+            switchPrepaid = "on"
         )
 
-        val response = switchCreditService.switchCredit(dto)
+        val response = switchPrepaidService.switchPrepaid(dto)
 
-        val updateUser = userService.findByCustomerId(user.customerId)
+        val updateUser = userService.findByCustomerId(dto.customerId)
 
-        assertEquals("Credit Off", response)
-        assertEquals(updateUser!!.creditFlg, true)
+        assertEquals("Prepaid On", response)
+        assertEquals(updateUser.prepaidFlg, true)
     }
 
     @Test
-    fun `should switch credit OFF`() {
+    fun `should switch prepaid OFF`() {
 
         val user = userService.save(
             UserModel(
                 customerId = UUID.randomUUID().toString(),
-                creditFlg = true
+                prepaidFlg = true
             )
         )
 
-        val dto = RequestSwitchCreditDto(
+        val dto = RequestSwitchPrepaidDto(
             customerId = user.customerId,
-            switchCredit = "off"
+            switchPrepaid = "off"
         )
 
-        val response = switchCreditService.switchCredit(dto)
+        val response = switchPrepaidService.switchPrepaid(dto)
 
-        val updateUser = userService.findByCustomerId(user.customerId)
+        val updateUser = userService.findByCustomerId(dto.customerId)
 
-        assertEquals("Credit Off", response)
-        assertEquals(updateUser!!.creditFlg, false)
+        assertEquals("Prepaid Off", response)
+        assertEquals(updateUser.prepaidFlg, false)
     }
 
     @Test
-    fun `should throw an Exception`() {
+    fun `should throw Exception`() {
 
     }
 }
