@@ -66,7 +66,8 @@ class UserService(
     }
 
     fun findByCustomerId(customerId: String): UserModel {
-        return userRepository.findByCustomerId(customerId) ?: throw Exception("User not found.")
+        return userRepository.findByCustomerId(customerId)
+            ?: throw Exception("User not found.")
     }
 
     fun save(user: UserModel): UserModel {

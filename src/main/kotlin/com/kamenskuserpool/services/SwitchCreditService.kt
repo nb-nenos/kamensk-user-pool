@@ -12,7 +12,6 @@ class SwitchCreditService(
 
     fun switchCredit(switchCreditPayload: RequestSwitchCreditDto): String {
         val creditCustomer = userService.findByCustomerId(switchCreditPayload.customerId)
-            ?: throw UserNotFoundException()
 
         when (switchCreditPayload.switchCredit) {
             "on" -> {

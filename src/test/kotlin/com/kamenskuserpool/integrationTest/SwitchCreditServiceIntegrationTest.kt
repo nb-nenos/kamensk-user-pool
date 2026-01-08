@@ -1,11 +1,12 @@
 package com.kamenskuserpool.integrationTest
 
 import com.kamenskuserpool.dtos.RequestSwitchCreditDto
+import com.kamenskuserpool.exceptions.SwitchFlagException
 import com.kamenskuserpool.models.UserModel
-import com.kamenskuserpool.repositories.UserRepository
 import com.kamenskuserpool.services.SwitchCreditService
 import com.kamenskuserpool.services.UserService
 import jakarta.transaction.Transactional
+import org.junit.jupiter.api.assertThrows
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.context.ActiveProfiles
@@ -43,7 +44,7 @@ class SwitchCreditServiceIntegrationTest {
 
         val updateUser = userService.findByCustomerId(user.customerId)
 
-        assertEquals("Credit Off", response)
+        assertEquals("Credit On", response)
         assertEquals(updateUser!!.creditFlg, true)
     }
 
@@ -73,5 +74,23 @@ class SwitchCreditServiceIntegrationTest {
     @Test
     fun `should throw an Exception`() {
 
+        val user = UserModel(
+            customerId = UUID.randomUUID().toString(),
+            fullName = "Natan Pires",
+            safepayUserId = 123,
+            creditFlg = true,
+            cpf = "78032156745"
+        )
+
+        userService.save(user)
+
+        val request = RequestSwitchCreditDto(
+            customerId = user.customerId,
+            switchCredit = "banana"
+        )
+
+        assertThrows<SwitchFlagException> {
+            switchCreditService.switchCredit(request)
+        }
     }
 }
