@@ -1,10 +1,12 @@
 package com.kamenskuserpool.integrationTest
 
 import com.kamenskuserpool.dtos.RequestSwitchAccountDto
+import com.kamenskuserpool.exceptions.InvalidRequestException
 import com.kamenskuserpool.models.UserModel
 import com.kamenskuserpool.services.SwitchAccountService
 import com.kamenskuserpool.services.UserService
 import jakarta.transaction.Transactional
+import org.junit.jupiter.api.assertThrows
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.context.ActiveProfiles
@@ -72,8 +74,20 @@ class SwitchAccountServiceIntegrationTest {
     @Test
     fun `should throw an Exception`() {
 
+        val user = userService.save(
+            UserModel(
+                customerId = UUID.randomUUID().toString(),
+                accountFlg = false
+            )
+        )
 
+        val dto = RequestSwitchAccountDto(
+            customerId = user.customerId,
+            switchAccount = "banana"
+        )
 
-
+        assertThrows<InvalidRequestException> {
+            switchAccountService.switchAccount(dto)
+        }
     }
 }

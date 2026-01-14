@@ -1,10 +1,12 @@
 package com.kamenskuserpool.integrationTest
 
 import com.kamenskuserpool.dtos.RequestSwitchPrepaidDto
+import com.kamenskuserpool.exceptions.SwitchFlagException
 import com.kamenskuserpool.models.UserModel
 import com.kamenskuserpool.services.SwitchPrepaidService
 import com.kamenskuserpool.services.UserService
 import jakarta.transaction.Transactional
+import org.junit.jupiter.api.assertThrows
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.context.ActiveProfiles
@@ -71,6 +73,22 @@ class SwitchPrepaidServiceIntegrationTest {
 
     @Test
     fun `should throw Exception`() {
+
+        val user = userService.save(
+            UserModel(
+                customerId = UUID.randomUUID().toString(),
+                prepaidFlg = false
+            )
+        )
+
+        val dto = RequestSwitchPrepaidDto(
+            customerId = user.customerId,
+            switchPrepaid = "banana"
+        )
+
+        assertThrows<SwitchFlagException> {
+            switchPrepaidService.switchPrepaid(dto)
+        }
 
     }
 }
